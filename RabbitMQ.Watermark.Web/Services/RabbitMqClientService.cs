@@ -21,7 +21,6 @@ namespace RabbitMQ.Watermark.Web.Services
             _connection = connection;
             _channel = channel;
             _logger = logger;
-            Connect();
         }
 
         public IModel Connect()
