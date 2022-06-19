@@ -9,7 +9,7 @@ namespace RabbitMQ.Watermark.Web.Models
         public int Id { get; set; }
 
         [StringLength(100)]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         [Column(TypeName= "decimal(18,2")]
         public decimal Price { get; set; }
@@ -18,6 +18,6 @@ namespace RabbitMQ.Watermark.Web.Models
         public int Stock { get; set; }
 
         [StringLength(100)]
-        public string Url { get; set; }
+        public string ImageName { get; set; }
     }
 }

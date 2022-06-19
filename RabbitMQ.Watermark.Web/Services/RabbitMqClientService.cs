@@ -4,7 +4,7 @@ using System;
 
 namespace RabbitMQ.Watermark.Web.Services
 {
-    public class RabbitMqClientService : IDisposable
+    public class RabbitMQClientService : IDisposable
     {
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
@@ -13,43 +13,51 @@ namespace RabbitMQ.Watermark.Web.Services
         public static string RoutingWatermark = "watermark-route-image";
         public static string QueueName = "queue-watermark-image";
 
-        private readonly ILogger<RabbitMqClientService> _logger;
+        private readonly ILogger<RabbitMQClientService> _logger;
 
-        public RabbitMqClientService(ConnectionFactory connectionFactory, IConnection connection, IModel channel, ILogger<RabbitMqClientService> logger)
+        public RabbitMQClientService(ConnectionFactory connectionFactory, ILogger<RabbitMQClientService> logger)
         {
             _connectionFactory = connectionFactory;
-            _connection = connection;
-            _channel = channel;
             _logger = logger;
+
         }
 
         public IModel Connect()
         {
             _connection = _connectionFactory.CreateConnection();
+
+
             if (_channel is { IsOpen: true })
             {
                 return _channel;
-
             }
+
             _channel = _connection.CreateModel();
 
             _channel.ExchangeDeclare(ExchangeName, type: "direct", true, false);
+
             _channel.QueueDeclare(QueueName, true, false, false, null);
+
+
             _channel.QueueBind(exchange: ExchangeName, queue: QueueName, routingKey: RoutingWatermark);
-            _logger.LogInformation("RabbitMq ile bağlantı kuruldu....");
+
+            _logger.LogInformation("RabbitMQ ile bağlantı kuruldu...");
+
+
             return _channel;
 
         }
+
         public void Dispose()
         {
             _channel?.Close();
             _channel?.Dispose();
-            _channel = default;
+
             _connection?.Close();
             _connection?.Dispose();
-            _logger.LogInformation("RabbitMQ ile bağlantı koptu....");
+
+            _logger.LogInformation("RabbitMQ ile bağlantı koptu...");
 
         }
     }
 }
-

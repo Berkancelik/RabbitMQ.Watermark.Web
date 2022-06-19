@@ -6,26 +6,26 @@ namespace RabbitMQ.Watermark.Web.Services
 {
     public class RabbitMQPublisher
     {
-        private readonly RabbitMqClientService _rabbitMqClientService;
+        private readonly RabbitMQClientService _rabbitMQClientService;
 
-        public RabbitMQPublisher(RabbitMqClientService rabbitMqClientService)
+        public RabbitMQPublisher(RabbitMQClientService rabbitMQClientService)
         {
-            _rabbitMqClientService = rabbitMqClientService;
+            _rabbitMQClientService = rabbitMQClientService;
         }
 
-        public void Publish(ProdcutImageCreatedEvent prodcutImageCreatedEvent)
+        public void Publish(ProductImageCreatedEvent productImageCreatedEvent)
         {
-            var channel = _rabbitMqClientService.Connect();
+            var channel = _rabbitMQClientService.Connect();
 
-            var bodyString = JsonSerializer.Serialize(prodcutImageCreatedEvent);
+            var bodyString = JsonSerializer.Serialize(productImageCreatedEvent);
 
             var bodyByte = Encoding.UTF8.GetBytes(bodyString);
 
             var properties = channel.CreateBasicProperties();
-
             properties.Persistent = true;
 
-            channel.BasicPublish(exchange: RabbitMqClientService.ExchangeName, routingKey: RabbitMqClientService.RoutingWatermark,basicProperties: properties,body: bodyByte);
+            channel.BasicPublish(exchange: RabbitMQClientService.ExchangeName, routingKey: RabbitMQClientService.RoutingWatermark, basicProperties: properties, body: bodyByte);
+
         }
     }
 }
