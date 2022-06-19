@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -35,9 +34,7 @@ namespace RabbitMQ.Watermark.Web.BackgroundServices
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            // bağlan
             _channel = _rabbitMQClientService.Connect();
-            // kaçar kaçar alacağız
             _channel.BasicQos(0, 1, false);
 
             return base.StartAsync(cancellationToken);
@@ -45,7 +42,6 @@ namespace RabbitMQ.Watermark.Web.BackgroundServices
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);
-            //hangi kuyruk ?, otomatik silinsin mi, consumer
             _channel.BasicConsume(RabbitMQClientService.QueueName, false, consumer);
 
             consumer.Received += Consumer_Received;
@@ -54,7 +50,6 @@ namespace RabbitMQ.Watermark.Web.BackgroundServices
         }
 
 
-        //ımage ekleme kısmı
         private Task Consumer_Received(object sender, BasicDeliverEventArgs @event)
         {
             try
@@ -84,9 +79,7 @@ namespace RabbitMQ.Watermark.Web.BackgroundServices
             }
             return Task.CompletedTask;
 
-        }
-
-        
+        }        
        
         public override Task StopAsync(CancellationToken cancellationToken)
         {
