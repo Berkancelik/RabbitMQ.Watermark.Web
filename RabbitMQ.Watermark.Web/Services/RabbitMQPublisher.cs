@@ -13,7 +13,7 @@ namespace RabbitMQ.Watermark.Web.Services
             _rabbitMQClientService = rabbitMQClientService;
         }
 
-        public void Publish(ProductImageCreatedEvent productImageCreatedEvent)
+        public void Publish(productImageCreatedEvent productImageCreatedEvent)
         {
             var channel = _rabbitMQClientService.Connect();
 
